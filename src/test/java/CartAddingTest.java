@@ -5,6 +5,8 @@ import model.SearchResultPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.openqa.selenium.WebDriver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,16 +15,17 @@ public class CartAddingTest {
     private WebDriver driver;
     private MainPage mainPage;
 
-    @BeforeEach
-    public void setUp() {
-        driver = BasePage.createDriverWithProxy();
+    public void setUp(BasePage.BrowserType browserType) {
+        driver = BasePage.createDriver(browserType, false);
         driver.manage().window().maximize();
         mainPage = new MainPage(driver);
     }
 
-    @Test
-    public void testAddFirstFoundItemToCart() {
+    @ParameterizedTest
+    @EnumSource(BasePage.BrowserType.class)
+    public void testAddFirstFoundItemToCart(BasePage.BrowserType browserType) {
         try {
+            setUp(browserType);
             mainPage.open("https://www.exist.ru/");
 
             SearchResultPage searchResultsPage = mainPage.searchByPartNumber("AT-05");

@@ -1,10 +1,10 @@
+import model.BasePage;
 import model.MainPage;
 import model.SearchResultPage;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,11 +12,9 @@ public class AnalogueTest {
     private MainPage mainPage;
     private WebDriver driver;
 
-
-
-    @BeforeEach
-    public void setUp() {
-       this.driver = new FirefoxDriver();
+//    @BeforeEach
+    public void setUp(BasePage.BrowserType browserType) {
+        driver = BasePage.createDriver(browserType,  false);
         driver.manage().window().maximize();
         mainPage = new MainPage(driver);
     }
@@ -28,8 +26,10 @@ public class AnalogueTest {
         }
     }
 
-    @Test
-    public void searchAnalogueTest() {
+    @ParameterizedTest
+    @EnumSource(BasePage.BrowserType.class)
+    public void searchAnalogueTest(BasePage.BrowserType browserType) {
+        setUp(browserType);
         mainPage.open("https://www.exist.ru/");
 
         SearchResultPage searchResult = mainPage.searchByCode("64210");

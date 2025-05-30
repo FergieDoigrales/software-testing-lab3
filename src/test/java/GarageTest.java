@@ -1,9 +1,12 @@
+import model.BasePage;
 import model.GaragePage;
 import model.LoginForm;
 import model.MainPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -13,21 +16,21 @@ public class GarageTest {
     private WebDriver driver;
     private MainPage mainPage;
 
-    @BeforeEach
-    public void setUp() {
-        driver = new FirefoxDriver();
+    public void setUp(BasePage.BrowserType browserType) {
+        driver = BasePage.createDriver(browserType, false);
         driver.manage().window().maximize();
         mainPage = new MainPage(driver);
     }
 
-    @Test
-    public void testAddVehicleToGarage() {
-
+    @ParameterizedTest
+    @EnumSource(BasePage.BrowserType.class)
+    public void testAddVehicleToGarage(BasePage.BrowserType browserType) {
+        setUp(browserType);
         mainPage.open("https://www.exist.ru/");
 
         if (!mainPage.isUserLoggedIn()) {
             LoginForm loginForm = mainPage.clickLoginLink();
-            mainPage = loginForm.login("krotovuha@gmail.com", "krotovuha");
+            mainPage = loginForm.login("coshkodevochka@yandex.ru", "yR5jf2Y");
 //            assertTrue(mainPage.isUserLoggedIn(), "Пользователь не авторизован");
         }
 
